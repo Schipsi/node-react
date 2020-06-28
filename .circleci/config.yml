@@ -23,18 +23,33 @@ jobs:
       - run:
           name: Build app
           command: npm install --prefix ./app
-          environment:
-            NODE_ENV: production
       - run:
           name: Build api
           command: npm install --prefix ./api
-          environment:
-            NODE_ENV: production
       - persist_to_workspace:
           root: ~/project
           paths:
             - app/node_modules
             - api/node_modules
+
+  lint:
+    docker:
+      - image:  circleci/node:12.16.3
+    steps:
+      - checkout
+      - run:
+          name: Build app
+          command: npm install --prefix ./app
+      - run:
+          name: Build api
+          command: npm install --prefix ./api
+      - run:
+          name: Lint app
+          command: ~/project/app/node_modules/.bin/eslint ~/project/app
+      - run:
+          name: Lint api
+          command: ~/project/api/node_modules/.bin/eslint ~/project/api
+
 
 workflows:
   version: 2
@@ -43,3 +58,6 @@ workflows:
     jobs:
       - build
       - lint-docker
+      - lint:
+          requires:
+            - build
