@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../models/');
 
-router.get('/todos', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const todos = await db.Todo.find({});
 
@@ -12,7 +12,7 @@ router.get('/todos', async (req, res, next) => {
     }
 });
 
-router.post('/todos', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
     try {
         const todo = await db.Todo.create(req.body);
 
@@ -22,7 +22,7 @@ router.post('/todos', async (req, res, next) => {
     }
 });
 
-router.put('/todos/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
     try {
         const todo = await db.Todo.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -34,7 +34,7 @@ router.put('/todos/:id', async (req, res, next) => {
     }
 });
 
-router.delete('/todos/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
     try {
         await db.Todo.findByIdAndRemove(req.params.id);
 
@@ -55,4 +55,5 @@ router.use((err, req, res, next) => {
 function success(res, payload) {
     return res.status(200).json(payload);
 }
+
 module.exports = router;

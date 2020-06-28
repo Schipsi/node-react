@@ -3,7 +3,9 @@ const router = express.Router();
 
 const mongoose = require('mongoose');
 
-let databaseConnection = 'Waiting for Database response...';router.get('/', function(req, res, next) {
+let databaseConnection = 'Waiting for Database response...';
+    router.get('/', function(req, res, next) {
+
     res.send(databaseConnection);
 });
 
