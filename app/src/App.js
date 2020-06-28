@@ -5,17 +5,28 @@ import './App.css';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: '' };
+        this.state = {
+            apiResponse: '',
+            dbResponse: '',
+        };
     }
 
-    callAPI() {
+    callApi() {
         fetch("http://localhost:3000/testApi")
             .then(res => res.text())
             .then(res => this.setState({ apiResponse: res }));
     }
 
+    callDb() {
+        fetch("http://localhost:3000/testDB")
+            .then(res => res.text())
+            .then(res => this.setState({ dbResponse: res }))
+            .catch(err => err);
+    }
+
     componentDidMount() {
-        this.callAPI();
+        this.callApi();
+        this.callDb();
     }
 
     render() {
@@ -24,7 +35,9 @@ class App extends Component {
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
                     <p className="App-intro">
-                        {this.state.apiResponse}
+                        { this.state.apiResponse }
+                        <br/>
+                        { this.state.dbResponse }
                     </p>
                     <a
                         className="App-link"
