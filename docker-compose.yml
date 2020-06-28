@@ -5,10 +5,6 @@ services:
     build: ./docker/api
     environment:
       NODE_ENV: development
-      DATABASE_USER: user
-      DATABASE_PASSWORD: root
-      DATABASE_HOST: node-react
-      DATABASE_NAME: node-react
     depends_on:
       - mongodb
     volumes:
