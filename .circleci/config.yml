@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  lint-docker:
+    docker:
+      - image: hadolint/hadolint:latest-debian
+    steps:
+      - checkout
+      - run:
+          name: Lint docker/api/Dockerfile
+          command: hadolint docker/app/Dockerfile
+      - run:
+          name: Lint docker/api/Dockerfile
+          command: hadolint docker/app/Dockerfile
+
+  build:
+    docker:
+      - image:  circleci/node:12.16.3
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build app
+          command: npm install --prefix ./app
+          environment:
+            NODE_ENV: production
+      - run:
+          name: Build api
+          command: npm install --prefix ./api
+          environment:
+            NODE_ENV: production
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - app/node_modules
+            - api/node_modules
+
+workflows:
+  version: 2
+
+  build:
+    jobs:
+      - build
+      - lint-docker
