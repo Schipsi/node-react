@@ -1,0 +1,39 @@
+version: "2.4"
+
+services:
+  api:
+    build: ./docker/api
+    environment:
+      NODE_ENV: development
+      DATABASE_USER: user
+      DATABASE_PASSWORD: root
+      DATABASE_HOST: node-react
+      DATABASE_NAME: node-react
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src/project/
+    ports:
+      - 3000:3000
+
+  app:
+    build: ./docker/app
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    depends_on:
+      - api
+    volumes:
+      - .:/usr/src/project/
+    ports:
+      - 8080:8080
+
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    volumes:
+      - ./data-node:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth
